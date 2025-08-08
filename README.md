@@ -6,7 +6,7 @@ A mod that places a customizable chalkboard in stump.
 
 ## Why are there boards/planks on the Chalkboard?
 
-This is due to you not having any photo's in the "ChalkboardImages" folder. All you have to do is simply put 5 photos of your choice into the folder. If you don't put 5 photos one of the 5 photo's will duplicate.
+This is due to you not having any photo's in the "ChalkboardImages" folder. All you have to do is simply put 5 photos of your choice into the folder. If you don't put 5 photos one of the amount of photo you have **will duplicate**.
 
 ## Why isn't my mod working?
 
