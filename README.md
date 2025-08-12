@@ -1,4 +1,7 @@
 # GorillaChalkBoard
+
+![all](https://img.shields.io/github/downloads/elligurt/GorillaChalkBoard/total)
+
 A mod that places a customizable chalkboard in stump.
 
 <img width="1280" height="720" alt="GorillaChalkBoardRelease" src="https://github.com/user-attachments/assets/651cadca-10de-4766-bc5e-f02be1fc2c03" />
