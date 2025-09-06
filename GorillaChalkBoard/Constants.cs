@@ -7,6 +7,6 @@
     {
         public const string GUID = "com.elliot.gorillatag.gorillachalkboard";
         public const string Name = "GorillaChalkBoard";
-        public const string Version = "1.0.0";
+        public const string Version = "1.0.1";
     }
 }
