@@ -1,57 +1,71 @@
-﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
+using System.Threading.Tasks;
 using UnityEngine;
 
-namespace GorillaChalkBoard
+namespace GorillaChalkBoard.Tools
 {
-    public static class AssetLoader
+    //https://github.com/developer9998/GorillaHistoricalTeleporter/blob/main/GorillaHistoricalTeleporter/Tools/AssetLoader.cs (slightly modified)
+    public class AssetLoader
     {
-        public static GameObject chalkboard;
+        private static AssetBundle loadedBundle;
+        private static readonly Dictionary<string, Object> loadedAssets = new Dictionary<string, Object>();
 
-        public static void OnGameInitialized()
+        private static Task bundleLoadTask;
+
+        public static async Task<T> LoadAsset<T>(string assetName) where T : Object
         {
-            try
+            Object cached;
+            if (loadedAssets.TryGetValue(assetName, out cached) && cached is T)
             {
-                if (chalkboard != null)
-                    return;
-
-                var assetBundle = LoadFromResource("GorillaChalkBoard.Content.chalkboard");
-                if (assetBundle == null)
-                    return;
-
-                chalkboard = GameObject.Instantiate(assetBundle.LoadAsset<GameObject>("GorillaChalkBoard"));
-                chalkboard.transform.localPosition = new Vector3(-69.2846f, 12.1246f, - 81.8547f);
-                chalkboard.transform.eulerAngles = new Vector3(0f, 108.5379f, 0f);
-
-                ImageManager.CreateImageFolder();
-                ImageManager.LoadAllImages();
-
-                ImageManager.ApplyImagesToPhotos(chalkboard);
-
-                ErrorManager.CheckAndShowError(chalkboard);
-
-                Debug.Log("[GorillaChalkBoard] Chalkboard initialized");
+                return (T)cached;
             }
-            catch (Exception e)
+
+            if (loadedBundle == null)
             {
-                Debug.LogError($"[GorillaChalkBoard] Error while initialzing: {e}");
+                if (bundleLoadTask == null)
+                {
+                    bundleLoadTask = LoadAssetBundle();
+                }
+                await bundleLoadTask;
             }
+
+            var completionSource = new TaskCompletionSource<T>();
+
+            AssetBundleRequest request = loadedBundle.LoadAssetAsync<T>(assetName);
+            request.completed += _ =>
+            {
+                T result = request.asset as T;
+                completionSource.TrySetResult(result);
+            };
+
+            T loadedAsset = await completionSource.Task;
+
+            if (loadedAsset != null)
+            {
+                loadedAssets[assetName] = loadedAsset;
+            }
+
+            return loadedAsset;
         }
 
-        public static AssetBundle LoadFromResource(string resourcePath)
+        private static async Task LoadAssetBundle()
         {
-            var assembly = Assembly.GetExecutingAssembly();
-            using (Stream stream = assembly.GetManifestResourceStream(resourcePath))
-            {
-                if (stream == null)
-                {
-                    Debug.LogError($"[GorillaChalkBoard] Resource not found: {resourcePath}");
-                    return null;
-                }
+            var completionSource = new TaskCompletionSource<AssetBundle>();
 
-                return AssetBundle.LoadFromStream(stream);
+            Stream stream = typeof(AssetLoader).Assembly.GetManifestResourceStream("GorillaChalkBoard.Content.chalkboard");
+            if (stream == null)
+            {
+                throw new FileNotFoundException("Embedded asset bundle not found. Make sure it's added as an embedded resource!!!!");
             }
+
+            AssetBundleCreateRequest request = AssetBundle.LoadFromStreamAsync(stream);
+            request.completed += _ =>
+            {
+                completionSource.TrySetResult(request.assetBundle);
+            };
+
+            loadedBundle = await completionSource.Task;
         }
     }
 }
