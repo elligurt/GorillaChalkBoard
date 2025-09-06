@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using UnityEngine;
@@ -38,15 +38,12 @@ namespace GorillaChalkBoard
                 tex.LoadImage(fileData);
                 loadedImages[i] = tex;
             }
-
-            Debug.Log($"[GorillaChalkBoard] Loaded {loadedImages.Length} images");
         }
 
         public static void ApplyImagesToPhotos(GameObject parentObject)
         {
             if (parentObject == null || loadedImages == null || loadedImages.Length == 0)
             {
-                Debug.LogWarning("[GorillaChalkBoard] No images to apply.");
                 return;
             }
 
@@ -62,13 +59,7 @@ namespace GorillaChalkBoard
                     {
                         Texture2D tex = loadedImages[i % loadedImages.Length];
                         rend.material.mainTexture = tex;
-
-                        Debug.Log($"[GorillaChalkBoard] Applied image {i % loadedImages.Length} to {photoNames[i]}");
                     }
-                }
-                else
-                {
-                    Debug.LogWarning($"[GorillaChalkBoard] Could not find {photoNames[i]}");
                 }
             }
         }
