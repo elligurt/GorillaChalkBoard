@@ -13,16 +13,12 @@ namespace GorillaChalkBoard
 
         private GameObject _boardPrefab;
 
-        private void Awake()
+        private async void Start()
         {
             Instance = this;
-            Utilla.Events.GameInitialized += OnGameInitialized;
-        }
-
-        private async void OnGameInitialized(object sender, EventArgs e)
-        {
             await SetupBoard();
         }
+
 
         private async Task SetupBoard()
         {
