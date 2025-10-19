@@ -16,3 +16,6 @@ This is due to you not having any photo's in the "ChalkboardImages" folder. All 
 "Why isn't my mod working" 
 
 this is very vauge please submit an issue [Here](https://github.com/elligurt/GorillaChalkBoard/issues) or in the [Discord](https://discord.gg/ckqJzzUuNc)
+
+# Disclaimer
+“This product is not affiliated with Another Axiom Inc. or its videogames Gorilla Tag and Orion Drift and is not endorsed or otherwise sponsored by Another Axiom. Portions of the materials contained herein are property of Another Axiom. ©2021 Another Axiom Inc.”
